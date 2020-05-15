@@ -1,16 +1,14 @@
-import React from 'react';
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
 
 const headerStyle = css`
-  background-color: #282c34;
-  min-height: 100vh;
+  height: 40px;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-direction: top;
+  align-items: top;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: black;
 `;
 
 export default function Header() {
