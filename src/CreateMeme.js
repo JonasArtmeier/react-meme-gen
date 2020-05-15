@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { css, jsx } from '@emotion/core';
 // import API from './API';
 // import Downshift from 'downshift';
-import axios from 'axios';
+// import DownloadLink from './downloadlink';
 
 // const MemeStyle = css`
 //   color: white;
@@ -32,6 +32,22 @@ export default function CreateMeme() {
   );
   const [select, setSelect] = useState([]);
 
+  function downloadBlob(blob, filename) {
+    const url = URL.createObjectUrl(blob);
+    const a = document.creatElement('a');
+    a.href = url;
+    a.download = filename;
+    const clickHandler = () => {
+      setTimeout(() => {
+        URL.revokeObjectURL(url);
+        this.removeEventListener('click', clickHandler);
+      }, 150);
+    };
+    a.click();
+    return a;
+  }
+  // a.addEventListener('click', clickHandler, false);
+
   useEffect(() => {
     fetch('https://memegen.link/api/templates/', {
       headers: { 'Content-Type': 'application/json' },
@@ -44,7 +60,7 @@ export default function CreateMeme() {
   }, []);
 
   return (
-    <flex css={flexStyle}>
+    <div css={flexStyle}>
       {/* <ul>
         {Object.value(data).map((item) => (
           <li key={item.objectID}>
@@ -65,16 +81,17 @@ export default function CreateMeme() {
           value={picture}
           onChange={(e) => setPicture(e.target.value)}
         /> */}
-        <select>
+        <select onChange={(e) => setPicture(e.target.value)}>
           value={picture}
           {select.map((name, i) => {
             return (
               <option key={i} value={name}>
                 {name}
+                {/* onChange={(e) => setPicture(e.target.value)} */}
               </option>
             );
           })}
-          onChange={(e) => setPicture(e.target.value)}
+          {/* onChange={(e) => setPicture(e.target.value)} */}
         </select>
         <input
           type="text"
@@ -106,21 +123,21 @@ export default function CreateMeme() {
         >
           Submit
         </button>
+        <button
+          href={newUrl}
+          type="button"
+          id="btn"
+          value="Download"
+          onClick={() => downloadBlob(newUrl)}
+        >
+          Click to Download
+        </button>
       </form>
-      <img
-        src={
-          newUrl
-          // 'https://memegen.link/' +
-          // { picture } +
-          // '/' +
-          // { lineOne } +
-          // '/' +
-          // { lineTwo } +
-          // '/.jpg?watermark=none'
-        }
-        alt="Here will be your Meme"
-      />
-    </flex>
+      <a href={newUrl} download target="blank">
+        <img src={newUrl} alt="Your meme here"></img>
+        />
+      </a>
+    </div>
   );
 }
 
